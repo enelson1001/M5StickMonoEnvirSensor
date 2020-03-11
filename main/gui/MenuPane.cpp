@@ -110,7 +110,7 @@ namespace redstone
     // Button read callback for the Lvgl input driver
     bool MenuPane::button_read_cb(lv_indev_drv_t* input_device_driver, lv_indev_data_t* data)
     {
-        uint32_t last_button = 0;
+        uint8_t last_button = 0;
         MenuPane* driver = reinterpret_cast<MenuPane*>(input_device_driver->user_data);
         int button_pressed = driver->read_hardware_buttons();
 

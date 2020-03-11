@@ -77,9 +77,6 @@ namespace redstone
                 // Set the mono system theme
                 theme = lv_theme_mono_init(0, NULL);
                 lv_theme_set_current(theme);
-
-                // LittlevGL graphics library's tick - runs every 5ms
-                esp_register_freertos_tick_hook(lv_tick_task);
             }
             else
             {
@@ -271,11 +268,5 @@ namespace redstone
     {
         DisplayDriver* driver = reinterpret_cast<DisplayDriver*>(drv->user_data);
         driver->display_drv_flush(drv, area, color_map);
-    }
-
-    // The  lv_tick_task that is required by LittlevGL for internal timing
-    void IRAM_ATTR DisplayDriver::lv_tick_task(void)
-    {
-        lv_tick_inc(portTICK_RATE_MS);  // 1 ms tick_task
     }
 }

@@ -33,9 +33,6 @@ namespace redstone
             bool initialize();
 
         private:
-            /// Lv tick task - Required by LittlevGL. LittlevGL uses this function to determine how much time has passed
-            static void lv_tick_task(void);
-
             /// SH1107 Flush Callback - C style callback required by LittlevGL
             /// \param drv The display driver structure reference, not used
             /// \param area The area of the display we want to update

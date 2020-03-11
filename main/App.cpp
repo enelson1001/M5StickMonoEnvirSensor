@@ -19,21 +19,21 @@
 // Typical output on M5Stick-Mono
 //
 //  MemStat: Mem type |  8-bit free | Smallest block | Minimum free | 32-bit free | Smallest block | Minimum free
-//  MemStat: INTERNAL |      163144 |         113804 |       162628 |      213880 |         113804 |       213356
-//  MemStat:      DMA |      163144 |         113804 |       162628 |      163144 |         113804 |       162628
+//  MemStat: INTERNAL |      163216 |         113804 |       162708 |      213528 |         113804 |       213012
+//  MemStat:      DMA |      163216 |         113804 |       162708 |      163216 |         113804 |       162708
 //  MemStat:   SPIRAM |           0 |              0 |            0 |           0 |              0 |            0
 //  MemStat:
 //  MemStat:             Name |      Stack |  Min free stack |  Max used stack
-//  MemStat:         LvglTask |       4096 |             452 |            3644
-//  MemStat:   PollSensorTask |       3300 |             932 |            2368
-//  MemStat: SocketDispatcher |      20480 |           18392 |            2088
-//  MemStat:         MainTask |      16384 |           12668 |            3716
+//  MemStat:         LvglTask |       4096 |             604 |            3492
+//  MemStat:   PollSensorTask |       3300 |             928 |            2372
+//  MemStat: SocketDispatcher |      20480 |           18400 |            2080
+//  MemStat:         MainTask |      16384 |           12692 |            3692
 //
 // Esp32-IDF version: v4.0-beta2
 // Toolchain version: xtensa-esp32-elf-gcc (crosstool-NG esp32-2019r1) 8.2.0
 // Lvgl version: v6.1.2 SHA1: 2ead4959
 // Smooth version: master SHA1: b4bf80b4
-// Bin file size: 1,121,024 bytes 
+// Bin file size: 1,120,928 bytes 
 //******************************************************************************************************************
 #include "App.h"
 #include <smooth/core/task_priorities.h>
