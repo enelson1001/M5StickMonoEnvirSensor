@@ -1,6 +1,6 @@
 /****************************************************************************************
  * GuiButton.h - A base class that GUI buttons implement
- * 
+ *
  * Created on Jan. 04, 2020
  * Copyright (c) 2019 Ed Nelson (https://github.com/enelson1001)
  * Licensed under MIT License (see LICENSE file)
@@ -63,5 +63,7 @@ namespace redstone
             lv_obj_t* create_btn(lv_obj_t* parent);
 
             lv_obj_t* gui_button;
+
+            lv_style_t gui_btn_style;
     };
 }

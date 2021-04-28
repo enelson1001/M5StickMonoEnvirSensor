@@ -1,6 +1,6 @@
 /****************************************************************************************
  * TitlePane.h - A class that creates a simple title pane
- * 
+ *
  * Created on Jan. 04, 2020
  * Copyright (c) 2019 Ed Nelson (https://github.com/enelson1001)
  * Licensed under MIT License (see LICENSE file)

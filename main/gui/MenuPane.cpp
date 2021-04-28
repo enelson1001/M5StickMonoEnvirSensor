@@ -1,6 +1,6 @@
 /****************************************************************************************
  * MenuPane.h - A class that creates a menu pane that contains menu buttons
- * 
+ *
  * Created on Jan. 04, 2020
  * Copyright (c) 2019 Ed Nelson (https://github.com/enelson1001)
  * Licensed under MIT License (see LICENSE file)
@@ -47,17 +47,18 @@ namespace redstone
         Log::info(TAG, "Creating the Menu Pane");
 
         // create style for the menu pane container
-        lv_style_copy(&menu_style, &lv_style_plain);
-        menu_style.body.main_color = LV_COLOR_BLACK;
-        menu_style.body.grad_color = LV_COLOR_BLACK;
-        menu_style.text.font = &lv_font_unscii_8;
+        lv_style_init(&menu_style);
+        lv_style_set_border_width(&menu_style, LV_STATE_DEFAULT, 0);
+        lv_style_set_radius(&menu_style, LV_STATE_DEFAULT, 0);
+        lv_style_set_text_font(&menu_style, LV_STATE_DEFAULT, &lv_font_unscii_8);
+        lv_style_set_bg_color(&menu_style, LV_STATE_DEFAULT, LV_COLOR_BLACK);
 
         // create a container to hold the menu buttons
         menu_pane_container = lv_cont_create(lv_scr_act(), NULL);
         lv_obj_set_size(menu_pane_container, width, height);
         lv_cont_set_layout(menu_pane_container, LV_LAYOUT_OFF);
         lv_obj_align(menu_pane_container, NULL, LV_ALIGN_IN_TOP_MID, 0, 0);
-        lv_cont_set_style(menu_pane_container, LV_CONT_STYLE_MAIN, &menu_style);
+        lv_obj_add_style(menu_pane_container, LV_CONT_PART_MAIN, &menu_style);
         lv_obj_set_hidden(menu_pane_container, true);
 
         // create next (->) button
@@ -69,8 +70,8 @@ namespace redstone
     }
 
     // Add a menu button - A menu button consist of a gui button and a hardware button.
-    // Pressing the hardware button cause the gui button to display being pressed and 
-    // create an on-clicked event when the pressed harware button is released.  The 
+    // Pressing the hardware button cause the gui button to display being pressed and
+    // create an on-clicked event when the pressed harware button is released.  The
     // debounce of the hardware button is handled in lv_indev_drv
     void MenuPane::add_menu_button(BtnID id, std::unique_ptr<GuiButton> gui_btn, std::unique_ptr<HwPushButton> hw_btn)
     {

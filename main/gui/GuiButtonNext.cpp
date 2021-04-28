@@ -1,6 +1,6 @@
 /****************************************************************************************
  * GuiButtonNext.h - A class that creates a NEXT gui button
- * 
+ *
  * Created on Jan. 04, 2020
  * Copyright (c) 2019 Ed Nelson (https://github.com/enelson1001)
  * Licensed under MIT License (see LICENSE file)
@@ -36,15 +36,11 @@ namespace redstone
         // create the button
         lv_obj_t* btn = create_btn(parent);
 
-        // sets the GuiButton callback to call this on_clicked function
-        btn->user_data = this;
-
-        // create style for this button label
-        lv_style_copy(&gui_btn_style, &lv_style_plain);
-        gui_btn_style.text.font = &lv_font_unscii_8;
-
         // set the size of the button
         lv_obj_set_size(btn, 30, 12);
+
+        // sets the GuiButton callback to call this on_clicked function
+        btn->user_data = this;
 
         // set the text for the button label
         lv_obj_t* label = lv_label_create(btn, NULL);

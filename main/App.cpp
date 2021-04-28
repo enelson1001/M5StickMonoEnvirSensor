@@ -29,11 +29,11 @@
 //  MemStat: SocketDispatcher |      20480 |           18400 |            2080
 //  MemStat:         MainTask |      16384 |           12692 |            3692
 //
-// Esp32-IDF version: v4.0-beta2
-// Toolchain version: xtensa-esp32-elf-gcc (crosstool-NG esp32-2019r1) 8.2.0
-// Lvgl version: v6.1.2 SHA1: 2ead4959
-// Smooth version: master SHA1: b4bf80b4
-// Bin file size: 1,120,928 bytes 
+// Esp32-IDF version: v4.3-beta3 - commit e9cf9e2 - April 14, 2021
+// Toolchain version: esp-2020r3-8.4.0/xtensa-esp32-elf
+// Lvgl version:  v7.11.0 - commit: ec9de51, March, 2021
+// Smooth version: master - commit: 5578b8b, April 15, 2021
+// Bin file size: 1,260,816 bytes 
 //******************************************************************************************************************
 #include "App.h"
 #include <smooth/core/task_priorities.h>

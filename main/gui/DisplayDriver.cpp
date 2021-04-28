@@ -29,16 +29,7 @@ namespace redstone
     static const char* TAG = "DisplayDriver";
 
     // Constructor
-    DisplayDriver::DisplayDriver() :
-            spi_host(VSPI_HOST),            // Use VSPI as host
-
-            spi_master(
-                spi_host,                   // host VSPI
-                DMA_1,                      // use DMA
-                GPIO_NUM_23,                // mosi gpio pin
-                GPIO_NUM_NC,                // miso gpio pin - none
-                GPIO_NUM_18,                // clock gpio pin
-                MAX_DMA_LEN)                // max transfer size
+    DisplayDriver::DisplayDriver()
     {
     }
 
@@ -47,7 +38,7 @@ namespace redstone
     {
         Log::info(TAG, "Initializing Lvgl SH1107 Display Driver ........");
 
-        display_initialized = init_display();
+        display_initialized = init_lcd_display();
 
         if (display_initialized)
         {
@@ -75,8 +66,8 @@ namespace redstone
                 lv_disp_drv_register(&disp_drv);
 
                 // Set the mono system theme
-                theme = lv_theme_mono_init(0, NULL);
-                lv_theme_set_current(theme);
+                //theme = lv_theme_mono_init(0, NULL);
+                //lv_theme_set_current(theme);
             }
             else
             {
@@ -88,12 +79,20 @@ namespace redstone
     }
 
     // Initialize the SH1107
-    bool DisplayDriver::init_display()
+    bool DisplayDriver::init_lcd_display()
     {
-        auto device = spi_master.create_device<DisplaySpi>(
+        // initialize spi-bus-master
+        Master::initialize(VSPI_HOST,
+                        SPI_DMA_Channel::DMA_1,        // use DMA
+                        GPIO_NUM_23,                   // mosi gpio pin
+                        GPIO_NUM_NC,                   // miso gpio pin  (none)
+                        GPIO_NUM_18,                   // clock gpio pin
+                        MAX_DMA_LEN);                  // max transfer size
+        
+        // create the LCDSpi device
+        auto device = Master::create_device<LCDSpi>(
                         GPIO_NUM_14,            // chip select gpio pin
                         GPIO_NUM_27,            // data command gpio pin
-                        //GPIO_NUM_33,            // reset gpio pin
                         0,                      // spi command_bits
                         0,                      // spi address_bits,
                         0,                      // bits_between_address_and_data_phase,
@@ -106,25 +105,29 @@ namespace redstone
                         true,                   // use pre-trans callback
                         true);                  // use post-trans callback
 
-        bool res = device->init(spi_host);
+        bool lcdspi_device_initialized = device->init(VSPI_HOST);
 
-        if (res)
+        if (lcdspi_device_initialized)
         {
-            //device->hw_reset(true, milliseconds(5), milliseconds(120));
             // add reset pin - pullup=false, pulldown=false, active_high=false
             device->add_reset_pin(std::make_unique<DisplayPin>(GPIO_NUM_33, false, false, false));
             device->hw_reset(true, milliseconds(5), milliseconds(120));  // reset chip
-
-            // initialize the display
-            res &= device->send_cmds(sh1107_init_cmds_1.data(), sh1107_init_cmds_1.size());
-            display = std::move(device);
         }
         else
         {
-            Log::error(TAG, "Initializing of SPI Device: SH1107 --- FAILED");
+            Log::error(TAG, "Initializing of LCDspi Device: FAILED");
         }
 
-        return res;
+        // initialize the display
+        bool sh1107_initialized = device->send_cmds(sh1107_init_cmds_1.data(), sh1107_init_cmds_1.size());
+        lcd_display = std::move(device);
+
+        if (!sh1107_initialized)
+        {
+            Log::error(TAG, "Initializing of SH1107 --- FAILED");
+        }
+
+        return lcdspi_device_initialized & sh1107_initialized;
     }
 
     // Set screen rotation
@@ -136,7 +139,7 @@ namespace redstone
         // lv_config file has oreintation set for landscape
         if (LV_HOR_RES_MAX > LV_VER_RES_MAX)
         {
-            res = display->send_cmd(SH1107Cmd::CommonOutputScanDirLandscape);
+            res = lcd_display->send_cmd(SH1107Cmd::CommonOutputScanDirLandscape);
         }
 
         if (!res)
@@ -178,7 +181,7 @@ namespace redstone
         }
 
         // Inform the lvgl graphics library that we are ready for flushing buffer
-        lv_disp_t* disp = lv_refr_get_disp_refreshing();
+        lv_disp_t* disp = _lv_refr_get_disp_refreshing();
         lv_disp_flush_ready(&disp->driver);
     }
 
@@ -192,7 +195,7 @@ namespace redstone
         page_commands[1] = SH1107Cmd::LowerColumnAddress | (start_col & 0x0F);
         page_commands[2] = SH1107Cmd::PageAddress0 | page_number;
 
-        if (!display->send_cmds(page_commands.data(), 3))
+        if (!lcd_display->send_cmds(page_commands.data(), 3))
         {
             Log::error(TAG, "Failed to send page commands");
         }
@@ -201,7 +204,7 @@ namespace redstone
     // Send pixel data
     void DisplayDriver::send_page_data(uint8_t* data, size_t length)
     {
-        if (!display->send_data(data, length))
+        if (!lcd_display->send_data(data, length))
         {
             Log::error(TAG, "Failed to send page data");
         }

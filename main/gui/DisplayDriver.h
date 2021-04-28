@@ -17,7 +17,7 @@
 #pragma once
 
 #include <lvgl/lvgl.h>
-#include <smooth/application/display/DisplaySpi.h>
+#include <smooth/application/display/LCDSpi.h>
 #include <smooth/application/display/SH1107.h>
 #include <smooth/core/io/spi/SpiDmaFixedBuffer.h>
 
@@ -71,7 +71,7 @@ namespace redstone
 
             /// Initialize the SH1107
             /// \return Returns true is successful false if initialization failed
-            bool init_display();
+            bool init_lcd_display();
 
             /// Send Page Commands
             /// Sends command to display for setting up a page pixel data transfer
@@ -95,9 +95,10 @@ namespace redstone
             static constexpr int MAX_DMA_LEN = SH1107_SEGMENTS * SH1107_PAGES; // 128 * 16 = 1024
             static constexpr int SH1107_PAGE_CMD_LEN = 64;
 
-            spi_host_device_t spi_host;
-            smooth::core::io::spi::Master spi_master;
-            std::unique_ptr<smooth::application::display::DisplaySpi> display{};
+            //spi_host_device_t spi_host;
+            //smooth::core::io::spi::Master spi_master;
+
+            std::unique_ptr<smooth::application::display::LCDSpi> lcd_display{};
             bool display_initialized{ false };
 
             lv_theme_t* theme;

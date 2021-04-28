@@ -43,27 +43,38 @@ namespace redstone
     {
         Log::info(TAG, "Creating CPHeatIndex");
 
+        // create a plain style
+        lv_style_init(&plain_style);
+        lv_style_set_pad_top(&plain_style, LV_STATE_DEFAULT, 10);
+        lv_style_set_pad_bottom(&plain_style, LV_STATE_DEFAULT, 10);
+        lv_style_set_pad_left(&plain_style, LV_STATE_DEFAULT, 0);
+        lv_style_set_pad_right(&plain_style, LV_STATE_DEFAULT, 0);
+        lv_style_set_line_opa(&plain_style, LV_STATE_DEFAULT, 0);
+        lv_style_set_pad_inner(&plain_style, LV_STATE_DEFAULT, 0);
+        lv_style_set_margin_all(&plain_style, LV_STATE_DEFAULT, 0);
+        lv_style_set_border_width(&plain_style, LV_STATE_DEFAULT, 0);
+        lv_style_set_radius(&plain_style, LV_STATE_DEFAULT, 0);
+        lv_style_set_bg_color(&plain_style, LV_STATE_DEFAULT, LV_COLOR_BLACK);
+
         // create style for the content container
-        lv_style_copy(&content_container_style, &lv_style_plain);
-        content_container_style.body.main_color = LV_COLOR_BLACK;
-        content_container_style.body.grad_color = LV_COLOR_BLACK;
+        lv_style_copy(&content_container_style, &plain_style);
 
         // create a content container
         content_container = lv_cont_create(lv_scr_act(), NULL);
         lv_obj_set_size(content_container, width, height);
         lv_cont_set_layout(content_container, LV_LAYOUT_CENTER);
         lv_obj_align(content_container, NULL, LV_ALIGN_CENTER, 0, 0);
-        lv_cont_set_style(content_container, LV_CONT_STYLE_MAIN, &content_container_style);
+        lv_obj_add_style(content_container, LV_CONT_PART_MAIN, &content_container_style);
         lv_obj_set_hidden(content_container, true);
 
         // create style for heat_index value
-        lv_style_copy(&heat_index_label_style, &lv_style_plain);
-        heat_index_label_style.text.font = &lv_font_14x14B_latin1_sup;
-        heat_index_label_style.text.color = LV_COLOR_WHITE;
+        lv_style_init(&heat_index_label_style);
+        lv_style_set_text_color(&heat_index_label_style, LV_STATE_DEFAULT, LV_COLOR_WHITE);
+        lv_style_set_text_font(&heat_index_label_style, LV_STATE_DEFAULT, &lv_font_14x14B_latin1_sup);
 
         // create a dynamic label for heat index measurement value
         heat_index_value_label = lv_label_create(content_container, NULL);
-        lv_obj_set_style(heat_index_value_label, &heat_index_label_style);
+        lv_obj_add_style(heat_index_value_label, LV_LABEL_PART_MAIN, &heat_index_label_style);
         lv_label_set_text(heat_index_value_label, "--");
         lv_obj_align(heat_index_value_label, NULL, LV_ALIGN_CENTER, 5, 0);
     }

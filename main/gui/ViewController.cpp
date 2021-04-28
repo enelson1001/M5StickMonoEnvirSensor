@@ -65,6 +65,7 @@ namespace redstone
     
         // create content panes
         content_pane = std::make_unique<CPTemperature>(task_lvgl);
+        //content_pane->create(LV_HOR_RES, 22);
         content_pane->create(LV_HOR_RES, 22);
         content_panes[Temperature] = std::move(content_pane);
     
